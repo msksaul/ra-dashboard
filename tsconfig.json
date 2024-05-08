@@ -18,7 +18,8 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "useUnknownInCatchVariables": false
   },
   "include": ["src", "vite.config.ts"],
   "references": [
