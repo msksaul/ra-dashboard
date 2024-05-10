@@ -14,8 +14,9 @@ const ProjectCardSkeleton = () => {
           active
           size="small"
           style={{
-            width: "200px",
+            width: "170px",
             height: "22px",
+            marginLeft: '8px'
           }}
         />
       }
@@ -24,7 +25,8 @@ const ProjectCardSkeleton = () => {
         active
         size="small"
         style={{
-          width: "200px",
+          width: "170px",
+          marginRight: 'auto'
         }}
       />
       <Skeleton.Avatar active size="small" />
