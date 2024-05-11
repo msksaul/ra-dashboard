@@ -5,15 +5,21 @@ import { COMPANIES_LIST_QUERY } from '@/graphql/query'
 import { Company } from '@/graphql/schema.types'
 import { SearchOutlined } from '@ant-design/icons'
 import { CreateButton, FilterDropdown, List, useTable, EditButton, DeleteButton } from '@refinedev/antd'
-import { getDefaultFilter, useGo } from '@refinedev/core'
+import { HttpError, getDefaultFilter, useGo } from '@refinedev/core'
 import { Input, Space, Table } from 'antd'
 import { currencyNumber } from '../../utilities'
+import { GetFieldsFromList } from '@refinedev/nestjs-query'
+import { CompaniesListQuery } from '@/graphql/types'
 
 
 export const CompanyList = ({ children }: React.PropsWithChildren) => {
 
   const go = useGo()
-  const { tableProps, filters } = useTable({
+  const { tableProps, filters } = useTable<
+    GetFieldsFromList<CompaniesListQuery>,
+    HttpError,
+    GetFieldsFromList<CompaniesListQuery>
+  >({
     resource: 'companies',
     onSearch: (values) => {
       return [
@@ -86,7 +92,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
                 <Input placeholder='Search Company'/>
               </FilterDropdown>
             )}
-            render={(value, record) => (
+            render={(_, record) => (
               <Space>
                 <CustomAvatar
                   shape='square'
@@ -103,7 +109,7 @@ export const CompanyList = ({ children }: React.PropsWithChildren) => {
           <Table.Column<Company>
             dataIndex='totalRevenue'
             title='Open deals amount'
-            render={(value, company) => (
+            render={(_, company) => (
               <Text>
                 {currencyNumber(company?.dealsAggregate?.[0].sum?.value) || 0}
               </Text>
