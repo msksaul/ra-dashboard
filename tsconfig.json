@@ -21,7 +21,7 @@
     },
     "useUnknownInCatchVariables": false
   },
-  "include": ["src", "vite.config.ts"],
+  "exclude": ["src", "vite.config.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
