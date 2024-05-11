@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CustomAvatar from '@/components/custom-avatar'
 import { Text } from '@/components/text'
 import { TextIcon } from '@/components/text-icon'
 import { User } from '@/graphql/schema.types'
 import { getDateColor } from '@/utilities'
 import { ClockCircleOutlined, DeleteOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons'
+import { useDelete, useNavigation } from '@refinedev/core'
 import { Button, Card, ConfigProvider, Dropdown, MenuProps, Space, Tag, Tooltip, theme } from 'antd'
 import dayjs from 'dayjs'
 import { memo, useMemo } from 'react'
@@ -24,7 +26,8 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
 
   const { token } = theme.useToken()
 
-  const edit = () => {return}
+  const { edit } = useNavigation()
+  const { mutate } = useDelete()
 
   const dropdownItems = useMemo(() => {
     const dropdownItems: MenuProps['items'] = [
@@ -33,7 +36,7 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
         key: '1',
         icon: <EyeOutlined />,
         onClick: () => {
-          edit()
+          edit('tasks', id, 'replace')
         }
       },
       {
@@ -41,7 +44,15 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
         label: 'Delete Card',
         key: '2',
         icon: <DeleteOutlined />,
-        onClick: () => {return}
+        onClick: () => {
+          mutate({
+            resource: 'tasks',
+            id,
+            meta: {
+              operation: 'task'
+            }
+          })
+        }
       }
     ]
 

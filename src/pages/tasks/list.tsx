@@ -8,7 +8,7 @@ import { UPDATE_TASK_STAGE_MUTATION } from '@/graphql/mutations'
 import { TASKS_QUERY, TASK_STAGES_QUERY } from '@/graphql/query'
 import { TaskStagesQuery, TasksQuery } from '@/graphql/types'
 import { DragEndEvent } from '@dnd-kit/core'
-import { useList, useUpdate } from '@refinedev/core'
+import { useList, useNavigation, useUpdate } from '@refinedev/core'
 import { GetFieldsFromList } from '@refinedev/nestjs-query'
 import { useMemo } from 'react'
 
@@ -16,6 +16,8 @@ type Task = GetFieldsFromList<TasksQuery>
 type TaskStage = GetFieldsFromList<TaskStagesQuery> & { tasks: Task[] }
 
 const List = ({ children }: React.PropsWithChildren) => {
+
+  const { replace } = useNavigation()
 
   const {data: stages, isLoading: isLoadingStages } = useList<TaskStage>({
     resource: 'taskStages',
@@ -79,7 +81,11 @@ const List = ({ children }: React.PropsWithChildren) => {
   }, [stages, tasks])
 
   const handleAddCard = (args: { stageId: string }) => {
-    return args
+    const path = args.stageId === 'unasssigned'
+      ? '/tasks/new'
+      : `/tasks/new?stageId=${args.stageId}`
+
+    replace(path)
   }
 
   const handleOnDragEnd = (event: DragEndEvent) => {
